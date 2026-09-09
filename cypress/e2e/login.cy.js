@@ -10,7 +10,7 @@ describe('Login Flow', () => {
   });
 
   it('should display alert when login failed', () => {
-    cy.intercept('POST', '**/v1/login', {
+    cy.intercept('POST', '**/login', {
       statusCode: 400,
       body: {
         status: 'fail',
