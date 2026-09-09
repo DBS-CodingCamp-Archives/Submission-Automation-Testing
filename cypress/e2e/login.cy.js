@@ -10,11 +10,7 @@ describe('Login Flow', () => {
   });
 
   it('should display alert when login failed', () => {
-    cy.get('input[type="email"]').type('email.salah@gmail.com');
-
-    cy.get('input[type="password"]').type('wrongpassword');
-
-    cy.intercept('POST', 'https://forum-api.dicoding.dev/v1/login', {
+    cy.intercept('POST', '**/v1/login', {
       statusCode: 400,
       body: {
         status: 'fail',
@@ -22,12 +18,14 @@ describe('Login Flow', () => {
       },
     }).as('loginRequest');
 
-    cy.on('window:alert', (text) => {
-      expect(text).to.equal('email or password is wrong');
-    });
-
+    cy.get('input[type="email"]').type('email.salah@gmail.com');
+    cy.get('input[type="password"]').type('wrongpassword');
     cy.get('button').contains('Masuk').click();
 
     cy.wait('@loginRequest');
+
+    cy.on('window:alert', (text) => {
+      expect(text).to.equal('email or password is wrong');
+    });
   });
 });
